@@ -15,9 +15,13 @@ const sidebarNavItems: NavItem[] = [
         href: '/settings/password',
     },
     {
-        title: 'Appearance',
-        href: '/settings/appearance',
+        title: 'My Qr Code',
+        href: '/settings/qr-code',
     },
+    // {
+    //     title: 'Appearance',
+    //     href: '/settings/appearance',
+    // },
 ];
 
 const page = usePage();

@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Link } from '@inertiajs/vue3';
 
 interface BreadcrumbItemType {
-    title: string;
+    title?: string;
     href?: string;
 }
 
