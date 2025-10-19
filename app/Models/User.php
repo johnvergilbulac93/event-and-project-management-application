@@ -32,7 +32,8 @@ class User extends Authenticatable
         'purok',
         'email',
         'password',
-        'isActive'
+        'isActive',
+        'role_id'
     ];
 
     protected $appends = ['full_name'];
@@ -41,7 +42,7 @@ class User extends Authenticatable
     {
         return $this->first_name . ' ' . $this->last_name;
     }
-    
+
     /**
      * The attributes that should be hidden for serialization.
      *

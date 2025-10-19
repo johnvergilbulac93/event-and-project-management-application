@@ -11,7 +11,7 @@ import { router, useForm, usePage } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'User Account',
+        title: 'Profile Account',
         href: '/user/create',
     },
 ];
@@ -67,9 +67,9 @@ onMounted(() => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head :title="`${title} User Account`" />
+        <Head :title="`${title} Profile Account`" />
         <div class="px-4 py-6">
-            <Heading :title="`${title} Account`" :description="`${title} a user account`" />
+            <Heading :title="`${title} Account`" :description="`${title} a profile account`" />
             <form @submit.prevent="isAdd ? onSubmit() : onUpdate()" class="space-y-4">
                 <div class="grid gap-2">
                     <div class="flex w-full gap-2">

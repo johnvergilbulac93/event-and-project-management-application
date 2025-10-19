@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import Heading from '@/components/Heading.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
+import VueQrcode from '@chenfengyuan/vue-qrcode';
 import { Head, router, usePage } from '@inertiajs/vue3';
+import { toPng } from 'html-to-image';
 import debounce from 'lodash.debounce';
-import { MoreHorizontal } from 'lucide-vue-next';
+import { MoreHorizontal, Plus } from 'lucide-vue-next';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manage User Account',
+        title: 'Manage Profile Account',
         href: '/user/list',
     },
 ];
@@ -37,9 +37,13 @@ const filter = debounce(() => {
         replace: true,
     });
 }, 200);
-const successMessage = ref();
+const templateReference = ref(null);
 const visible = ref(false);
+const visible2 = ref(false);
+const downloading = ref(false);
 const userId = ref();
+const qrValue = ref('');
+const moduleType = ref('Household');
 const onUpdate = (id: number) => {
     router.visit(route('user.update.index', id));
 };
@@ -50,9 +54,33 @@ const onDelete = (id: number) => {
 const confirmDelete = () => {
     router.delete(route('user.destroy', userId.value), { onSuccess: () => toast.success('Successfully deleted.') });
 };
-// const handleSearch = () => {
-//     filter()
-// }
+const showQrCode = (record: any) => {
+    qrValue.value = record.email;
+    visible2.value = true;
+};
+const downloadQRCode = () => {
+    if (templateReference.value === null) {
+        return;
+    }
+
+    downloading.value = true;
+
+    toPng(templateReference.value)
+        .then((dataUrl) => {
+            const link = document.createElement('a');
+            link.download = 'my-qrcode.png';
+            link.href = dataUrl;
+            link.click();
+            downloading.value = false;
+        })
+        .catch((err) => {
+            console.log(err, templateReference.value);
+            downloading.value = false;
+        });
+};
+const onHouseHold = (id: number) => {
+    router.visit(route('household.index', id));
+};
 onMounted(() => {
     if (flash.message) {
         toast.success(flash.message);
@@ -66,10 +94,10 @@ watch(form, (newVal) => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="Manage User Account" />
+        <Head title="Manage Profile Account" />
         <Toaster richColors closeButton position="top-right" />
         <div class="px-4 py-6">
-            <Heading title="User Account" description="Manage your user account" />
+            <Heading title="Profile Account" description="Manage profile account" />
             <div class="flex justify-between gap-2">
                 <div class="mb-4 flex gap-2 sm:w-full md:w-1/2">
                     <Input
@@ -84,7 +112,7 @@ watch(form, (newVal) => {
                     />
                     <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                 </div>
-                <Button @click="onCreate"> <Plus /> Create Account </Button>
+                <Button @click="onCreate"> <Plus /> Add  </Button>
             </div>
             <div class="rounded border">
                 <Table>
@@ -120,6 +148,10 @@ watch(form, (newVal) => {
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
                                             <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="onHouseHold(item.id)">
+                                                Household Member
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="showQrCode(item)"> Show Qr Code </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -150,5 +182,16 @@ watch(form, (newVal) => {
             </div>
         </div>
         <ConfirmAlertDialog @continue="confirmDelete" v-model:visible="visible" />
+        <Dialog @ok="downloadQRCode" :button-text="'Download'" v-model:visible2="visible2" :title="'Download your Qr Code'">
+            <div class="flex items-center justify-center" ref="templateReference">
+                <vue-qrcode
+                    :value="qrValue"
+                    :options="{
+                        width: 460,
+                        color: { dark: '#20A418', light: '#ffffff' },
+                    }"
+                />
+            </div>
+        </Dialog>
     </AppLayout>
 </template>

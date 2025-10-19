@@ -67,4 +67,17 @@ class AttendanceController extends Controller
             'user' => $user,
         ]);
     }
+    public function listOfAttendees(Request $request, $event_id)
+    {
+        $search = $request->search;
+
+        $attendances = Attendance::with(['event', 'user'])
+            ->where('event_id', $event_id)
+            ->whereHas('user', function ($query) use ($search) {
+                $query->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%");
+            });
+
+        return $attendances->paginate();
+    }
 }

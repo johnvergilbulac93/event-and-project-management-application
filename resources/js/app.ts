@@ -8,8 +8,11 @@ import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css';
-
-const appName = 'Event and Project Management System';
+import AppLayout from '@/layouts/AppLayout.vue';
+import Heading from '@/components/Heading.vue';
+import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
+import Dialog from '@/usable/Dialog.vue';
+const appName = 'Tiptip Event and Project Management System';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
@@ -19,6 +22,10 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .component('Toaster', Toaster)
+            .component('AppLayout', AppLayout)
+            .component('Heading', Heading)
+            .component('ConfirmAlertDialog', ConfirmAlertDialog)
+            .component('Dialog', Dialog)
             .mount(el);
     },
     progress: {

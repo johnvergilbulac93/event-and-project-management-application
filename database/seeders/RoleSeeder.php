@@ -15,7 +15,6 @@ class RoleSeeder extends Seeder
     {
         Role::truncate();
         Role::insert([
-            ['name' => 'SuperAdmin'],
             ['name' => 'Admin'],
             ['name' => 'Household']
         ]);

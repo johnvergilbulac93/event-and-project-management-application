@@ -10,4 +10,5 @@ Route::middleware('auth')->controller(AttendanceController::class)->prefix('atte
     Route::get('/{event_id}', 'create')->name('attendance.scanner.index');
     Route::post('/', 'store')->name('attendance.store');
     Route::delete('/{event_id}', 'destroy')->name('attendance.destroy');
+    Route::get('/attendees/{event_id}', 'listOfAttendees')->name('list.attendees');
 });

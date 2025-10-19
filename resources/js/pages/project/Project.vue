@@ -10,10 +10,9 @@ import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import debounce from 'lodash.debounce';
-import { MoreHorizontal } from 'lucide-vue-next';
+import { MoreHorizontal, Plus } from 'lucide-vue-next';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Manage Project',
@@ -87,7 +86,7 @@ watch(form, (newVal) => {
                     />
                     <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                 </div>
-                <Button @click="onCreate"> <Plus /> Create Project </Button>
+                <Button @click="onCreate"> <Plus /> Add </Button>
             </div>
             <div class="rounded border">
                 <Table>

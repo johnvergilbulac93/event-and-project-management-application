@@ -20,7 +20,7 @@ const emit = defineEmits(['continue'])
       <AlertDialogHeader>
         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete your account.
+          This action cannot be undone. This will permanently deleted.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\Event\EventController;
@@ -12,6 +13,4 @@ Route::middleware('auth')->controller(EventController::class)->prefix('event')->
     Route::get('/{event_id}', 'updateIndex')->name('event.update.index');
     Route::put('/{event_id}', 'update')->name('event.update');
     Route::delete('/{event_id}', 'destroy')->name('event.destroy');
-
-
 });

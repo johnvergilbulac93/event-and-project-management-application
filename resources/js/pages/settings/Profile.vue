@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 
 import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem, type User } from '@/types';
+import { toast } from 'vue-sonner';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -29,13 +30,18 @@ const page = usePage();
 const user = page.props.auth.user as User;
 
 const form = useForm({
-    name: user.full_name,
+    first_name: user.first_name,
+    middle_name: user.middle_name,
+    last_name: user.last_name,
     email: user.email,
 });
 
 const submit = () => {
     form.patch(route('profile.update'), {
         preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Profile updated.');
+        },
     });
 };
 </script>
@@ -43,18 +49,50 @@ const submit = () => {
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
         <Head title="Profile settings" />
+        <Toaster richColors closeButton position="top-right" />
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
-                <HeadingSmall title="Profile information" description="Update your name and email address" />
+                <HeadingSmall title="Profile information" description="Update your profile information" />
 
                 <form @submit.prevent="submit" class="space-y-6">
                     <div class="grid gap-2">
-                        <Label for="name">Name</Label>
-                        <Input id="name" class="mt-1 block w-full" v-model="form.name" required autocomplete="name" placeholder="Full name" />
-                        <InputError class="mt-2" :message="form.errors.name" />
+                        <Label for="last_name">Last Name</Label>
+                        <Input
+                            id="last_name"
+                            class="mt-1 block w-full"
+                            v-model="form.last_name"
+                            required
+                            autocomplete="name"
+                            placeholder="Last name"
+                        />
+                        <InputError class="mt-2" :message="form.errors.last_name" />
+                    </div>
+                    <div class="grid gap-2">
+                        <Label for="middle_name">Middle Name</Label>
+                        <Input
+                            id="middle_name"
+                            class="mt-1 block w-full"
+                            v-model="form.middle_name"
+                            required
+                            autocomplete="name"
+                            placeholder="Middle name"
+                        />
+                        <InputError class="mt-2" :message="form.errors.middle_name" />
                     </div>
 
+                    <div class="grid gap-2">
+                        <Label for="first_name">First Name</Label>
+                        <Input
+                            id="first_name"
+                            class="mt-1 block w-full"
+                            v-model="form.first_name"
+                            required
+                            autocomplete="name"
+                            placeholder="First name"
+                        />
+                        <InputError class="mt-2" :message="form.errors.first_name" />
+                    </div>
                     <div class="grid gap-2">
                         <Label for="email">Email address</Label>
                         <Input
