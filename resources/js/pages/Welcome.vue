@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import InputError from '@/components/InputError.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Input } from '@/components/ui/input';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import axios from 'axios';
 import Autoplay from 'embla-carousel-autoplay';
 import debounce from 'lodash.debounce';
 import { onMounted, ref } from 'vue';
+import { toast } from 'vue-sonner';
 
 const plugin = Autoplay({
     delay: 3000,
@@ -47,26 +49,54 @@ const menus = [
     },
 ];
 const events = ref([]);
-const nextPageUrl = ref('/home/events'); // your route for fetching
+const projects = ref([]);
+const eventNextPageUrl = ref('/home/events'); // your route for fetching
+const projectNextPageUrl = ref('/home/projects'); // your route for fetching
 
+const form = useForm({
+    name: '',
+    email: '',
+    subject: '',
+    comment: '',
+});
 const getEvents = debounce(async () => {
-    // const { data } = await axios.get('/home/events');
-    // console.log(data);
-    if (!nextPageUrl.value) return;
-    const { data } = await axios.get(nextPageUrl.value);
+    if (!eventNextPageUrl.value) return;
+    const { data } = await axios.get(eventNextPageUrl.value);
 
     // append records
     events.value.push(...data.data);
 
     // update next page
-    nextPageUrl.value = data.next_page_url;
+    eventNextPageUrl.value = data.next_page_url;
+}, 200);
+
+const getProjects = debounce(async () => {
+    if (!projectNextPageUrl.value) return;
+    const { data } = await axios.get(projectNextPageUrl.value);
+
+    // append records
+    projects.value.push(...data.data);
+
+    // update next page
+    projectNextPageUrl.value = data.next_page_url;
 }, 200);
 
 const goTo = () => {
     router.visit(route('login'));
 };
+const onSubmit = () => {
+    form.post(route('feedback.store'), {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            toast.success('Thank you, form submitted.');
+            form.reset();
+        },
+    });
+};
 onMounted(() => {
     getEvents();
+    getProjects();
 });
 </script>
 
@@ -75,6 +105,8 @@ onMounted(() => {
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
+    <Toaster closeButton="true" closeButtonPosition="top-right" position="bottom-right" />
+
     <div>
         <header class="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div class="container mx-4 flex h-16 items-center justify-between">
@@ -109,8 +141,29 @@ onMounted(() => {
             </div>
         </section>
         <section id="events" class="bg-gray-100 p-8">
+            <h2 class="mb-4 text-center text-3xl font-bold text-primary md:text-4xl">Events</h2>
             <div class="flex flex-wrap justify-center gap-4">
-                <div
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a
+                        href="#"
+                        class="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 md:max-w-xl md:flex-row dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        v-for="item in events"
+                        :key="item"
+                    >
+                        <img
+                            class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                            src="/images/logo.png"
+                            alt=""
+                        />
+                        <div class="flex flex-col justify-between p-4 leading-normal">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item.title }}</h5>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                                {{ item.description }}
+                            </p>
+                        </div>
+                    </a>
+                </div>
+                <!-- <div
                     v-for="item in events"
                     :key="item"
                     class="max-w-sm rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
@@ -149,23 +202,25 @@ onMounted(() => {
                             </svg>
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="flex items-center justify-center mt-4">
-                <Button v-if="nextPageUrl" @click="getEvents">See More</Button>
+            <div class="mt-4 flex items-center justify-center">
+                <Button v-if="eventNextPageUrl" @click="getEvents">See More</Button>
             </div>
         </section>
         <section id="projects" class="p-8">
+            <h2 class="mb-4 text-center text-3xl font-bold text-primary md:text-4xl">Projects</h2>
+
             <div class="flex flex-wrap justify-center gap-4">
                 <a
                     href="#"
                     class="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 md:max-w-xl md:flex-row dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-                    v-for="(_, index) in 3"
-                    :key="index"
+                    v-for="item in projects"
+                    :key="item"
                 >
                     <img
                         class="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-                        src="/images/logo.png"
+                        :src="item.image"
                         alt=""
                     />
                     <div class="flex flex-col justify-between p-4 leading-normal">
@@ -179,25 +234,29 @@ onMounted(() => {
         </section>
 
         <section id="feedbacks" class="flex items-center justify-center bg-gray-100 p-8">
-            <form class="grid w-1/2 items-start gap-4 px-4">
+            <form @submit.prevent="onSubmit()" class="grid w-1/2 items-start gap-4 px-4">
                 <h2 class="text-center text-3xl font-bold text-primary md:text-4xl">Feedback Form</h2>
                 <div class="grid gap-2">
                     <Label html-for="name" class="font-bold">Name</Label>
-                    <Input :tabindex="1" id="name" type="text" />
+                    <Input :class="{ 'border border-red-500': form.errors.name }" v-model="form.name" :tabindex="1" id="name" type="text" />
+                    <InputError :message="form.errors.name" />
                 </div>
                 <div class="grid gap-2">
                     <Label html-for="email" class="font-bold">Email</Label>
-                    <Input :tabindex="2" id="email" type="text" />
+                    <Input :class="{ 'border border-red-500': form.errors.email }" v-model="form.email" :tabindex="2" id="email" type="email" />
+                    <InputError :message="form.errors.email" />
                 </div>
                 <div class="grid gap-2">
                     <Label html-for="subject" class="font-bold">Subject</Label>
-                    <Input :tabindex="3" id="subject" type="text" />
+                    <Input :class="{ 'border border-red-500': form.errors.subject }" v-model="form.subject" :tabindex="3" id="subject" type="text" />
+                    <InputError :message="form.errors.subject" />
                 </div>
                 <div class="grid gap-2">
                     <Label html-for="comment" class="font-bold">Comment</Label>
-                    <Textarea :tabindex="4" id="comment" />
+                    <Textarea :class="{ 'border border-red-500': form.errors.comment }" v-model="form.comment" :tabindex="4" id="comment" />
+                    <InputError :message="form.errors.comment" />
                 </div>
-                <Button type="submit"> Submit </Button>
+                <Button type="submit" class="cursor-pointer"> Submit </Button>
             </form>
         </section>
         <section id="about_us" class="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-primary/10 px-6 py-16">

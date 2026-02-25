@@ -9,7 +9,11 @@ class Feedback extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'feedbacks';
     protected $fillable = [
-        'description',
+        'name',
+        'email',
+        'subject',
+        'comment',
     ];
 }

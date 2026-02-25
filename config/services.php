@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'semaphore' => [
+    'api_key' => env('SEMAPHORE_API_KEY'),
+    'base_url' => env('SEMAPHORE_BASE_URL', 'https://api.semaphore.co/api/v4/messages'),
+],
 
 ];

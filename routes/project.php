@@ -15,7 +15,6 @@ Route::middleware('auth')->controller(ProjectController::class)->prefix('project
     Route::post('/', 'store')->name('project.store');
     Route::get('/{project_id}', 'updateIndex')->name('project.update.index');
     Route::put('/{project_id}', 'update')->name('project.update');
+    Route::post('/image/{project_id}', 'updateImage')->name('project.update.image');
     Route::delete('/{project_id}', 'destroy')->name('project.destroy');
-
-
 });

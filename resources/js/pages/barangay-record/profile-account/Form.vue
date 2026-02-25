@@ -7,12 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'User Account',
-        href: '/user/create',
+        title: 'Profile Account',
+        href: '/barangay-record/profile-account',
     },
 ];
 
@@ -35,13 +35,13 @@ const form = useForm({
     gender: '',
 });
 function back() {
-    router.visit(route('user.index'), { method: 'get' });
+    router.visit(route('barangay-record.profile-account'), { method: 'get' });
 }
 function onSubmit() {
-    form.post(route('user.store'), { onFinish: () => form.reset() });
+    form.post(route('barangay-record.profile-account.store') );
 }
 function onUpdate() {
-    form.put(route('user.update', form.id))
+    form.put(route('barangay-record.profile-account.update', form.id));
 }
 
 onMounted(() => {
@@ -67,9 +67,9 @@ onMounted(() => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="User Account" />
+        <Head :title="`${title} Profile Account`" />
         <div class="px-4 py-6">
-            <Heading :title="`${title} Account`" :description="`${title} a user account`" />
+            <Heading :title="`${title} Account`" :description="`${title} a profile account`" />
             <form @submit.prevent="isAdd ? onSubmit() : onUpdate()" class="space-y-4">
                 <div class="grid gap-2">
                     <div class="flex w-full gap-2">
@@ -209,7 +209,52 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
- 
+                <div class="grid gap-2">
+                    <div class="flex w-full gap-2">
+                        <div class="w-full space-y-2">
+                            <Label for="house_no" :class="{ 'text-red-500': form.errors.house_no }">House No.</Label>
+                            <Input
+                                id="text"
+                                type="text"
+                                autofocus
+                                :tabindex="9"
+                                autocomplete="house_no"
+                                v-model="form.house_no"
+                                placeholder="house no."
+                                :class="{ 'border border-red-500': form.errors.house_no }"
+                            />
+                            <InputError :message="form.errors.house_no" />
+                        </div>
+                        <div class="w-full space-y-2">
+                            <Label for="street" :class="{ 'text-red-500': form.errors.street }">Street</Label>
+                            <Input
+                                id="street"
+                                type="text"
+                                autofocus
+                                :tabindex="10"
+                                autocomplete="street"
+                                v-model="form.street"
+                                placeholder="street"
+                                :class="{ 'border border-red-500': form.errors.street }"
+                            />
+                            <InputError :message="form.errors.street" />
+                        </div>
+                        <div class="w-full space-y-2">
+                            <Label for="purok" :class="{ 'text-red-500': form.errors.purok }">Purok</Label>
+                            <Input
+                                id="purok"
+                                :class="{ 'border border-red-500': form.errors.purok }"
+                                type="text"
+                                autofocus
+                                :tabindex="11"
+                                autocomplete="purok"
+                                v-model="form.purok"
+                                placeholder="purok"
+                            />
+                            <InputError :message="form.errors.purok" />
+                        </div>
+                    </div>
+                </div>
                 <div class="mt-4 flex items-center justify-between">
                     <Button tabindex="13" size="sm" type="button" @click="back"> Back </Button>
                     <Button tabindex="12" size="sm" type="submit"> Submit </Button>

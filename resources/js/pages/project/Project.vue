@@ -11,6 +11,7 @@ import { Head, router, usePage } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import debounce from 'lodash.debounce';
 import { MoreHorizontal, Plus } from 'lucide-vue-next';
+import moment from 'moment';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
 const breadcrumbs: BreadcrumbItem[] = [
@@ -92,11 +93,11 @@ watch(form, (newVal) => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Title</TableHead>
-                            <TableHead>Description</TableHead>
+                            <TableHead>Project Name</TableHead>
+                            <TableHead>Location</TableHead>
+                            <TableHead>Cost</TableHead>
                             <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
-                            <TableHead>No. of Days</TableHead>
+                            <TableHead>Completion Date</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead></TableHead>
                         </TableRow>
@@ -105,19 +106,19 @@ watch(form, (newVal) => {
                         <template v-if="projects?.data.length">
                             <TableRow v-for="item in projects.data" :key="item.id">
                                 <TableCell class="font-medium">
-                                    {{ item.title }}
+                                    {{ item.project_name }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ item.description }}
+                                    {{ item.location }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ item.start_date }}
+                                    {{ item.cost }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ item.end_date }}
+                                    {{ moment(item.start_date).format('LL') }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ no_of_days(item.start_date, item.end_date) }}
+                                    {{ moment(item.completion_date).format('LL') }}
                                 </TableCell>
                                 <TableCell class="font-medium">
                                     {{ item.status }}

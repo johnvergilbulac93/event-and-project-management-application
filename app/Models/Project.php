@@ -10,10 +10,12 @@ class Project extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'title',
-        'description',
+        'project_name',
+        'location',
+        'cost',
         'start_date',
-        'end_date',
+        'completion_date',
+        'image',
         'status',
     ];
 }

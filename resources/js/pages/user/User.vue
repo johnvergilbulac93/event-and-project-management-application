@@ -10,12 +10,12 @@ import { Head, router, usePage } from '@inertiajs/vue3';
 import { toPng } from 'html-to-image';
 import debounce from 'lodash.debounce';
 import { MoreHorizontal, Plus } from 'lucide-vue-next';
+import moment from 'moment';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Manage Profile Account',
+        title: 'User Account',
         href: '/user/list',
     },
 ];
@@ -54,10 +54,7 @@ const onDelete = (id: number) => {
 const confirmDelete = () => {
     router.delete(route('user.destroy', userId.value), { onSuccess: () => toast.success('Successfully deleted.') });
 };
-const showQrCode = (record: any) => {
-    qrValue.value = record.email;
-    visible2.value = true;
-};
+
 const downloadQRCode = () => {
     if (templateReference.value === null) {
         return;
@@ -78,9 +75,7 @@ const downloadQRCode = () => {
             downloading.value = false;
         });
 };
-const onHouseHold = (id: number) => {
-    router.visit(route('household.index', id));
-};
+
 onMounted(() => {
     if (flash.message) {
         toast.success(flash.message);
@@ -94,10 +89,10 @@ watch(form, (newVal) => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="Manage Profile Account" />
+        <Head title="User Account" />
         <Toaster richColors closeButton position="top-right" />
         <div class="px-4 py-6">
-            <Heading title="Profile Account" description="Manage profile account" />
+            <Heading title="User Account" description="Manage user account" />
             <div class="flex justify-between gap-2">
                 <div class="mb-4 flex gap-2 sm:w-full md:w-1/2">
                     <Input
@@ -112,14 +107,14 @@ watch(form, (newVal) => {
                     />
                     <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                 </div>
-                <Button @click="onCreate"> <Plus /> Add  </Button>
+                <Button @click="onCreate"> <Plus /> Add </Button>
             </div>
             <div class="rounded border">
                 <Table>
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead>Gender</TableHead>
+                            <TableHead>Date Created</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead></TableHead>
                         </TableRow>
@@ -131,7 +126,7 @@ watch(form, (newVal) => {
                                     {{ item.full_name }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ item.gender }}
+                                    {{ moment(item.created_at).format('LLL') }}
                                 </TableCell>
                                 <TableCell
                                     ><Badge :class="item.isActive == 0 ? 'bg-red-500' : ''" v-text="item.isActive == 1 ? 'Active' : 'Inactive'"
@@ -147,11 +142,7 @@ watch(form, (newVal) => {
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onHouseHold(item.id)">
-                                                Household Member
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="showQrCode(item)"> Show Qr Code </DropdownMenuItem>
+                                            <!-- <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem> -->
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

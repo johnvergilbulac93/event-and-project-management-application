@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\ProfileUserFormRequest;
 use App\Http\Requests\User\UserFormRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,39 +29,41 @@ class ProfileAccountController extends Controller
             ->paginate($limit)
             ->withQueryString(); // keep query string during pagination
 
-        return Inertia::render('user/User', [
+        return Inertia::render('barangay-record/profile-account/ProfileAccount', [
             'users' => $users,
             'filters' => [
                 'search' => $search,
             ]
         ]);
+
+        // return Inertia::render('barangay-record/profile-account/ProfileAccount');
     }
     public function create()
     {
-        return Inertia::render('user/UserForm');
+        return Inertia::render('barangay-record/profile-account/Form');
     }
 
-    public function store(UserFormRequest $request)
+    public function store(ProfileUserFormRequest $request)
     {
         $user = $request->validated();
-        $user['password'] = '12345678';
+        $user['role_id'] = 2;
         User::create($user);
-        return redirect()->route('user.index')
+        return redirect()->route('barangay-record.profile-account')
             ->with('message', 'Successfully saved.');
     }
 
     public function updateIndex($id)
     {
-        return Inertia::render('user/UserForm', [
+        return Inertia::render('barangay-record/profile-account/Form', [
             'users' => User::findOrFail($id)
         ]);
     }
 
-    public function update(UserFormRequest $request, $id)
+    public function update(ProfileUserFormRequest $request, $id)
     {
 
         User::whereId($id)->update($request->validated());
-        return redirect()->route('user.index')
+        return redirect()->route('barangay-record.profile-account')
             ->with('message', 'Successfully updated.');
     }
     public function destroy($id)

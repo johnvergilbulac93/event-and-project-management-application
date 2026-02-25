@@ -18,9 +18,8 @@ class UserController extends Controller
         $limit = $request->input("limit");
 
 
-
         $users = User::query()
-            ->where('role_id',  2)
+            ->where('role_id',  1)
             ->when($search, function ($query, $search) {
                 $query->where('first_name', 'like', "%{$search}%")
                     ->orWhere('last_name', 'like', "%{$search}%");
@@ -45,6 +44,7 @@ class UserController extends Controller
     {
         $user = $request->validated();
         $user['password'] = '12345678';
+        $user['role_id'] = 1;
         User::create($user);
         return redirect()->route('user.index')
             ->with('message', 'Successfully saved.');

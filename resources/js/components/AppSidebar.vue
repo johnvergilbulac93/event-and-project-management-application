@@ -4,7 +4,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Archive, BookOpen, Calendar, Folder, FolderDot, FolderSearch, LayoutGrid, ListCheck, MessageSquareMore, User } from 'lucide-vue-next';
+import { Archive, BookOpen, Calendar, Folder, FolderDot, LayoutGrid, ListCheck, User } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -14,13 +14,18 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Profile Account',
+        title: 'User Account',
         href: '/user/list',
         icon: User,
     },
+    // {
+    //     title: 'Profile Account',
+    //     href: '/user/list',
+    //     icon: Users,
+    // },
     {
         title: 'Barangay Record',
-        href: '/barangay-record/list',
+        href: '/barangay-record/profile-account',
         icon: Archive,
     },
     {
@@ -38,16 +43,16 @@ const mainNavItems: NavItem[] = [
         href: '/projects/list',
         icon: FolderDot,
     },
-    {
-        title: 'Feedback',
-        href: '/feedback/list',
-        icon: MessageSquareMore,
-    },
-    {
-        title: 'Report',
-        href: '/report',
-        icon: FolderSearch,
-    },
+    // {
+    //     title: 'Feedback',
+    //     href: '/feedback/list',
+    //     icon: MessageSquareMore,
+    // },
+    // {
+    //     title: 'Report',
+    //     href: '/report',
+    //     icon: FolderSearch,
+    // },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -71,7 +76,7 @@ const footerNavItems: NavItem[] = [
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
                         <Link :href="route('dashboard')">
-                        <AppLogo />
+                            <AppLogo />
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Feedback;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectFormRequest extends FormRequest
+class FeedbackRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,10 @@ class ProjectFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_name' => 'required|string',
-            'location' => 'required|string',
-            'cost' => 'required',
-            'start_date' => 'required',
-            'completion_date' => 'required|after:start_date',
-            'image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'status' => 'required|string'
+            'name' =>  'required|string',
+            'email' => 'required|email',
+            'subject' => 'required|string',
+            'comment' => 'required|string'
         ];
     }
 }

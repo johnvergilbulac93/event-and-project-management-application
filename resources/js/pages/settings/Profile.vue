@@ -61,7 +61,7 @@ const submit = () => {
                         <Input
                             id="last_name"
                             class="mt-1 block w-full"
-                            v-model="form.last_name"
+                            v-model="form.last_name" 
                             required
                             autocomplete="name"
                             placeholder="Last name"

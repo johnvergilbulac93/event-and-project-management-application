@@ -39,7 +39,13 @@ class ProjectController extends Controller
     public function store(ProjectFormRequest $request)
     {
         $project = $request->validated();
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $project['image'] = asset('storage/' . $path);
+        }
+
         Project::create($project);
+
         return redirect()->route('project.index')
             ->with('message', 'Successfully saved.');
     }
@@ -51,9 +57,19 @@ class ProjectController extends Controller
     }
     public function update(ProjectFormRequest $request, $id)
     {
-        Project::whereId($id)->update($request->validated());
+        $project = $request->validated();
+        Project::whereId($id)->update($project);
+
         return redirect()->route('project.index')
             ->with('message', 'Successfully updated.');
+    }
+    public function updateImage(Request $request, $id)
+    {
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads', 'public');
+            $image = asset('storage/' . $path);
+            Project::whereId($id)->update(['image' => $image]);
+        }
     }
     public function destroy($id)
     {

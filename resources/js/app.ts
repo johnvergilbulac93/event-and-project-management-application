@@ -1,17 +1,17 @@
 import '../css/app.css';
 
+import Heading from '@/components/Heading.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
+import Dialog from '@/usable/Dialog.vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
+import { Toaster } from 'vue-sonner';
+import 'vue-sonner/style.css';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
-import { Toaster } from 'vue-sonner'
-import 'vue-sonner/style.css';
-import AppLayout from '@/layouts/AppLayout.vue';
-import Heading from '@/components/Heading.vue';
-import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
-import Dialog from '@/usable/Dialog.vue';
 const appName = 'Tiptip Event and Project Management System';
 
 createInertiaApp({
