@@ -14,7 +14,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'User Account',
+        title: 'Profile Account',
         href: '/user/list',
         icon: User,
     },
@@ -33,11 +33,11 @@ const mainNavItems: NavItem[] = [
         href: '/event/list',
         icon: Calendar,
     },
-    {
-        title: 'Attendance',
-        href: '/attendance/list',
-        icon: ListCheck,
-    },
+    // {
+    //     title: 'Attendance',
+    //     href: '/attendance/list',
+    //     icon: ListCheck,
+    // },
     {
         title: 'Project',
         href: '/projects/list',
@@ -70,7 +70,7 @@ const footerNavItems: NavItem[] = [
 </script>
 
 <template>
-    <Sidebar collapsible="icon" variant="inset">
+    <Sidebar collapsible="icon" variant="floating">
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>

@@ -10,7 +10,7 @@ import { Head, router, usePage } from '@inertiajs/vue3';
 import debounce from 'lodash.debounce';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
-
+import Layout from '../barangay-record/Layout.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Manage Attendance',
@@ -75,7 +75,7 @@ watch(form, (newVal) => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <Toaster richColors position="top-right" />
         <Head title="Manage Attendance" />
-        <div class="px-4 py-6">
+        <Layout>
             <Heading title="Manage Attendance" description="Manage your attendance" />
             <div class="rounded border">
                 <Table>
@@ -108,9 +108,10 @@ watch(form, (newVal) => {
                                 <TableCell class="font-medium">
                                     {{ item.date }}
                                 </TableCell>
-                                <TableCell
-                                    ><Badge :class="item.status == 0 ? 'bg-red-500' : ''" v-text="item.status == 1 ? 'Active' : 'Inactive'"
-                                /></TableCell>
+                                <TableCell>
+                                    <Badge :class="item.status == 0 ? 'bg-red-500' : ''"
+                                        v-text="item.status == 1 ? 'Active' : 'Inactive'" />
+                                </TableCell>
                                 <TableCell class="w-20 text-center">
                                     <Button @click="onScanner(item.id)">Go To QR Scanner</Button>
                                 </TableCell>
@@ -124,7 +125,7 @@ watch(form, (newVal) => {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </Layout>
         <ConfirmAlertDialog @continue="confirmDelete" v-model:visible="visible" />
     </AppLayout>
 </template>

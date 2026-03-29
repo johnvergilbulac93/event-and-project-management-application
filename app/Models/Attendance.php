@@ -14,9 +14,9 @@ class Attendance extends Model
         'user_id'
     ];
 
-    public function user()
+    public function household()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(HouseHoldHead::class, 'user_id', 'id');
     }
     public function event()
     {

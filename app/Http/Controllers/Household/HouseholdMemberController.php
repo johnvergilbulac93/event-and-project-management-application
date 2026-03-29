@@ -12,7 +12,7 @@ class HouseholdMemberController extends Controller
 {
     public function index($id)
     {
-        $household = HouseHoldMember::where('user_id', $id)->get();
+        $household = HouseHoldMember::where('household_head_id', $id)->get();
         return Inertia::render('user/HouseHoldMember', ['househead_id' => $id, 'household' => $household]);
     }
     public function store(HouseholdRequest $request)
@@ -24,7 +24,8 @@ class HouseholdMemberController extends Controller
         $household = HouseHoldMember::find($id);
         $household->delete();
     }
-    public function update(HouseholdRequest $request,$id) {
+    public function update(HouseholdRequest $request, $id)
+    {
         HouseHoldMember::whereId($id)->update($request->validated());
     }
 }

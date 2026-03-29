@@ -11,5 +11,5 @@ class HouseHoldMember extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['name', 'user_id', 'gender'];
+    protected $fillable = ['name', 'household_head_id', 'gender'];
 }

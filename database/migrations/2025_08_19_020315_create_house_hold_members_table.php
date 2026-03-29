@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('house_hold_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('household_head_id');
             $table->string('name');
             $table->string('gender');
             $table->softDeletes();

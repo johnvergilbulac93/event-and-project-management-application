@@ -78,23 +78,19 @@ onMounted(() => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+
         <Head title="QR Scanner Attendance" />
         <Toaster richColors position="top-right" />
         <div class="px-4 py-6">
             <Heading title="Attendance Scanner" description="Scan user qr code" />
             <h2 class="text-xl font-bold">{{ event?.title }}</h2>
             <div class="w-full">
-                <input
-                    ref="inputRef"
-                    type="password"
-                    @keyup="onChange"
-                    v-model="form.result"
-                    placeholder="Put the cursor here and scan the qr code"
-                    class="absolute -left-[9999px]"
-                />
+                <input ref="inputRef" type="password" @keyup="onChange" v-model="form.result"
+                    placeholder="Put the cursor here and scan the qr code" class="absolute -left-[9999px]" />
                 <p class="mt-4 text-sm font-bold">Previous Scan Attendee: &nbsp;{{ form.name }}</p>
             </div>
-            <Input class="search-input my-4 sm:w-full lg:w-1/2" type="text" v-model="filter.search" placeholder="enter name to search" />
+            <Input class="search-input my-4 sm:w-full lg:w-1/2" type="text" v-model="filter.search"
+                placeholder="enter name to search" />
             <div class="mt-4 rounded border">
                 <Table>
                     <TableHeader>
@@ -107,7 +103,7 @@ onMounted(() => {
                         <template v-if="attendees.data?.length">
                             <TableRow v-for="item in attendees.data as any" :key="item.id">
                                 <TableCell class="font-medium">
-                                    {{ item?.user?.full_name }}
+                                    {{ item?.household?.full_name }}
                                 </TableCell>
                                 <TableCell class="font-medium">
                                     <!-- {{ formatTime(item.created_at) }} -->
@@ -125,14 +121,9 @@ onMounted(() => {
             </div>
             <div class="mt-4 flex items-center justify-between gap-1">
                 <div class="flex gap-1">
-                    <Button
-                        v-for="link in attendees?.links"
-                        :key="link.label"
-                        :variant="link.active ? 'default' : 'outline'"
-                        :disabled="!link.url"
-                        v-html="link.label"
-                        @click="link.url && router.visit(link.url)"
-                    />
+                    <Button v-for="link in attendees?.links" :key="link.label"
+                        :variant="link.active ? 'default' : 'outline'" :disabled="!link.url" v-html="link.label"
+                        @click="link.url && router.visit(link.url)" />
                 </div>
                 <div>
                     Showing {{ attendees?.from ? attendees?.from : 0 }} to {{ attendees?.to ? attendees?.to : 0 }} of

@@ -4,6 +4,7 @@ import Heading from '@/components/Heading.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ConfirmAlertDialog from '@/usable/ConfirmAlertDialog.vue';
 import Dialog from '@/usable/Dialog.vue';
+import Modal from '@/usable/Modal.vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
@@ -26,6 +27,8 @@ createInertiaApp({
             .component('Heading', Heading)
             .component('ConfirmAlertDialog', ConfirmAlertDialog)
             .component('Dialog', Dialog)
+            .component('Modal', Modal)
+
             .mount(el);
     },
     progress: {

@@ -20,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 const form = useForm({
-    user_id: props.househead_id,
+    household_head_id: props.househead_id,
     id: '',
     name: '',
     gender: '',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\HouseHoldHead;
 use App\Models\HouseHoldMember;
 use App\Models\Project;
 use App\Models\User;
@@ -15,7 +16,7 @@ class DashboardController extends Controller
     public function index()
     {
         return Inertia::render('Dashboard', [
-            'hHead' => User::where('role_id',  2)->count(),
+            'hHead' => HouseHoldHead::count(),
             'hMember' => HouseHoldMember::count(),
             'event' => Event::count(),
             'project' => Project::count(),

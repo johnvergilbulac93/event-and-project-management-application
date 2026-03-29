@@ -33,7 +33,7 @@ class ProfileUserFormRequest extends FormRequest
             'street' => 'required',
             'purok' => 'required',
             'mobile_no' => 'required',
-            'email' => 'required|email|unique:users,email,'.$this->id,
+            'email' => 'required|email|unique:house_hold_heads,email,' . $this->id,
         ];
     }
 }

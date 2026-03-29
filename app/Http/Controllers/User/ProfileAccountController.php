@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\ProfileUserFormRequest;
 use App\Http\Requests\User\UserFormRequest;
+use App\Models\HouseHoldHead;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,9 +19,7 @@ class ProfileAccountController extends Controller
         $page = $request->input("page");
         $limit = $request->input("limit");
 
-
-        $users = User::query()
-            ->where('role_id',  2)
+        $users = HouseHoldHead::query()
             ->when($search, function ($query, $search) {
                 $query->where('first_name', 'like', "%{$search}%")
                     ->orWhere('last_name', 'like', "%{$search}%");
@@ -46,8 +45,7 @@ class ProfileAccountController extends Controller
     public function store(ProfileUserFormRequest $request)
     {
         $user = $request->validated();
-        $user['role_id'] = 2;
-        User::create($user);
+        HouseHoldHead::create($user);
         return redirect()->route('barangay-record.profile-account')
             ->with('message', 'Successfully saved.');
     }
@@ -55,20 +53,20 @@ class ProfileAccountController extends Controller
     public function updateIndex($id)
     {
         return Inertia::render('barangay-record/profile-account/Form', [
-            'users' => User::findOrFail($id)
+            'users' => HouseHoldHead::findOrFail($id)
         ]);
     }
 
     public function update(ProfileUserFormRequest $request, $id)
     {
 
-        User::whereId($id)->update($request->validated());
+        HouseHoldHead::whereId($id)->update($request->validated());
         return redirect()->route('barangay-record.profile-account')
             ->with('message', 'Successfully updated.');
     }
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        $user = HouseHoldHead::findOrFail($id);
         $user->delete();
     }
 }

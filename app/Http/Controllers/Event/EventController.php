@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Event\EventFormRequest;
 use App\Http\Requests\User\UserFormRequest;
 use App\Models\Event;
+use App\Models\HouseHoldHead;
+use App\Notifications\EventCreatedMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class EventController extends Controller
@@ -43,7 +46,8 @@ class EventController extends Controller
     public function store(EventFormRequest $request)
     {
         $event = $request->validated();
-        Event::create($event);
+        $res = Event::create($event);
+        $this->sendNotification($res, $type = 0);
         return redirect()->route('event.index')
             ->with('message', 'Successfully saved.');
     }
@@ -57,7 +61,8 @@ class EventController extends Controller
 
     public function update(EventFormRequest $request, $id)
     {
-        Event::whereId($id)->update($request->validated());
+        $res = tap(Event::findOrFail($id))->update($request->validated());
+        $this->sendNotification($res, $type = 1);
         return redirect()->route('event.index')
             ->with('message', 'Successfully updated.');
     }
@@ -65,5 +70,10 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->delete();
+    }
+    public function sendNotification($event, $type)
+    {
+        $household = HouseHoldHead::where('isActive', 1)->get();
+        Notification::send($household, new EventCreatedMail($event, $type));
     }
 }

@@ -22,7 +22,7 @@ class HouseholdRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required'],
+            'household_head_id' => ['required'],
             'name' => ['required', 'string'],
             'gender' => ['required', 'string'],
         ];

@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\HouseHoldHead;
 use Illuminate\Validation\ValidationException;
 
 class AttendanceController extends Controller
@@ -43,7 +44,7 @@ class AttendanceController extends Controller
     }
     public function store(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = HouseHoldHead::where('email', $request->email)->first();
         if (!$user) {
             return response()->json(['message' => 'User not found.'], 422);
         }
@@ -71,9 +72,9 @@ class AttendanceController extends Controller
     {
         $search = $request->search;
 
-        $attendances = Attendance::with(['event', 'user'])
+        $attendances = Attendance::with(['event', 'household'])
             ->where('event_id', $event_id)
-            ->whereHas('user', function ($query) use ($search) {
+            ->whereHas('household', function ($query) use ($search) {
                 $query->where('first_name', 'like', "%{$search}%")
                     ->orWhere('last_name', 'like', "%{$search}%");
             });

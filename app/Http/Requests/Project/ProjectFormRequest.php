@@ -27,7 +27,7 @@ class ProjectFormRequest extends FormRequest
             'cost' => 'required',
             'start_date' => 'required',
             'completion_date' => 'required|after:start_date',
-            'image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:2048',
+            // 'image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png|max:2048',
             'status' => 'required|string'
         ];
     }

@@ -49,6 +49,7 @@ const downloadQRCode = () => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
+
         <Head title="My Qr Code" />
 
         <SettingsLayout>
@@ -56,13 +57,10 @@ const downloadQRCode = () => {
             <Button @click="downloadQRCode">Download QR Code</Button>
 
             <div class="flex items-center justify-center" ref="templateReference">
-                <vue-qrcode
-                    :value="userInput"
-                    :options="{
-                        width: 400,
-                        color: { dark: '#20A418', light: '#ffffff' },
-                    }"
-                ></vue-qrcode>
+                <vue-qrcode :value="userInput" :options="{
+                    width: 400,
+                    color: { dark: '#031002', light: '#031002' },
+                }"></vue-qrcode>
             </div>
         </SettingsLayout>
     </AppLayout>

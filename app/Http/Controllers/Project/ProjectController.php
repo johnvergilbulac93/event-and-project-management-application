@@ -39,11 +39,11 @@ class ProjectController extends Controller
     public function store(ProjectFormRequest $request)
     {
         $project = $request->validated();
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('uploads', 'public');
-            $project['image'] = asset('storage/' . $path);
-        }
-
+        // if ($request->hasFile('image')) {
+        //     $path = $request->file('image')->store('uploads', 'public');
+        //     $project['image'] = asset('storage/' . $path);
+        // }
+        
         Project::create($project);
 
         return redirect()->route('project.index')
@@ -59,7 +59,6 @@ class ProjectController extends Controller
     {
         $project = $request->validated();
         Project::whereId($id)->update($project);
-
         return redirect()->route('project.index')
             ->with('message', 'Successfully updated.');
     }

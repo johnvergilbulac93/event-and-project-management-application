@@ -1,54 +1,85 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
+import { CheckIcon, ChevronsUpDownIcon } from 'lucide-vue-next'
+import { computed, ref } from 'vue'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import {
-    Combobox,
-    ComboboxAnchor,
-    ComboboxEmpty,
-    ComboboxGroup,
-    ComboboxInput,
-    ComboboxItem,
-    ComboboxItemIndicator,
-    ComboboxList,
-    ComboboxTrigger,
-} from '@/components/ui/combobox';
-import { cn } from '@/lib/utils';
-import { Check, ChevronsUpDown, Search } from 'lucide-vue-next';
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 
-const props = defineProps({ options: Object, label: String });
-const modelValue = defineModel();
+const frameworks = [
+    {
+        value: 'next.js',
+        label: 'Next.js',
+    },
+    {
+        value: 'sveltekit',
+        label: 'SvelteKit',
+    },
+    {
+        value: 'nuxt.js',
+        label: 'Nuxt.js',
+    },
+    {
+        value: 'remix',
+        label: 'Remix',
+    },
+    {
+        value: 'astro',
+        label: 'Astro',
+    },
+]
+
+const props = defineProps({ options: Array });
+const open = ref(false)
+const value = defineModel<string | number>()
+
+const selectedFramework = computed(() =>
+    props.options.find(d => d.value === value.value),
+)
+
+function selectFramework(selectedValue: string) {
+    value.value = selectedValue === value.value ? '' : selectedValue
+    open.value = false
+}
 </script>
 
 <template>
-    <Combobox v-model="modelValue" by="label">
-        <ComboboxAnchor as-child>
-            <ComboboxTrigger as-child>
-                <Button variant="outline" class="justify-between">
-                    {{ modelValue?.label ?? label }}
-
-                    <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-            </ComboboxTrigger>
-        </ComboboxAnchor>
-
-        <ComboboxList>
-            <div class="relative w-full max-w-sm items-center">
-                <ComboboxInput class="h-10 rounded-none border-0 focus-visible:ring-0" :placeholder="label" />
-                <span class="absolute inset-y-0 start-0 flex items-center justify-center px-3">
-                    <Search class="size-4 text-muted-foreground" />
-                </span>
-            </div>
-
-            <ComboboxEmpty> No result found. </ComboboxEmpty>
-
-            <ComboboxGroup>
-                <ComboboxItem v-for="option in options" :key="option.value" :value="option.value">
-                    {{ option.label }}
-
-                    <ComboboxItemIndicator>
-                        <Check :class="cn('ml-auto h-4 w-4')" />
-                    </ComboboxItemIndicator>
-                </ComboboxItem>
-            </ComboboxGroup>
-        </ComboboxList>
-    </Combobox>
+    <Popover v-model:open="open">
+        <PopoverTrigger as-child>
+            <Button variant="outline" role="combobox" :aria-expanded="open" class="w-[350px] justify-between">
+                {{ selectedFramework?.label || "Select Event..." }}
+                <ChevronsUpDownIcon class="opacity-50" />
+            </Button>
+        </PopoverTrigger>
+        <PopoverContent class="w-[350px] p-0">
+            <Command>
+                <CommandInput class="h-9" placeholder="Search Event..." />
+                <CommandList>
+                    <CommandEmpty>No framework found.</CommandEmpty>
+                    <CommandGroup>
+                        <CommandItem v-for="option in options" :key="option.value" :value="option.value" @select="(ev) => {
+                            selectFramework(ev.detail.value as string)
+                        }">
+                            {{ option.label }}
+                            <CheckIcon :class="cn(
+                                'ml-auto',
+                                value === option.value ? 'opacity-100' : 'opacity-0',
+                            )" />
+                        </CommandItem>
+                    </CommandGroup>
+                </CommandList>
+            </Command>
+        </PopoverContent>
+    </Popover>
 </template>

@@ -14,3 +14,6 @@ Route::middleware('auth')->controller(EventController::class)->prefix('event')->
     Route::put('/{event_id}', 'update')->name('event.update');
     Route::delete('/{event_id}', 'destroy')->name('event.destroy');
 });
+Route::controller(EventController::class)->prefix('event')->group(function () {
+    Route::get('/event-page/{event_id}', 'index')->name('event.page');
+});

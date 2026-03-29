@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
+import UploadForm from './UploadForm.vue';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -39,20 +46,35 @@ const filter = debounce(() => {
     });
 }, 200);
 const visible = ref(false);
+const visible2 = ref(false);
 
-const eventId = ref('');
+
+const projectId = ref('');
+
+
+const formatPeso = (value: any) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        minimumFractionDigits: 0,
+    }).format(value);
+};
 const onUpdate = (id: string) => {
     router.visit(route('project.update.index', id));
 };
 const onDelete = (id: string) => {
     visible.value = true;
-    eventId.value = id;
+    projectId.value = id;
 };
 const confirmDelete = () => {
-    router.delete(route('project.destroy', eventId.value), { onSuccess: () => toast.success('Successfully deleted.') });
+    router.delete(route('project.destroy', projectId.value), { onSuccess: () => toast.success('Successfully deleted.') });
 };
 const no_of_days = (start: string, end: string) => {
     return dayjs(end).diff(dayjs(start), 'day');
+};
+const onViewUpload = (id: any) => {
+    visible2.value = true;
+    projectId.value = id;
 };
 
 onMounted(() => {
@@ -70,29 +92,25 @@ watch(form, (newVal) => {
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
         <Toaster richColors position="top-right" />
+
         <Head title="Manage Project" />
         <div class="px-4 py-6">
             <Heading title="Manage Project" description="Manage your project" />
             <div class="flex justify-between gap-2">
                 <div class="mb-4 flex gap-2 sm:w-full md:w-1/2">
-                    <Input
-                        v-model="form.search"
-                        id="search"
-                        type="text"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="search"
-                        placeholder="search"
-                    />
+                    <Input v-model="form.search" id="search" type="text" required autofocus :tabindex="1"
+                        autocomplete="search" placeholder="search" />
                     <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                 </div>
-                <Button @click="onCreate"> <Plus /> Add </Button>
+                <Button @click="onCreate">
+                    <Plus /> Add
+                </Button>
             </div>
             <div class="rounded border">
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead>Image</TableHead>
                             <TableHead>Project Name</TableHead>
                             <TableHead>Location</TableHead>
                             <TableHead>Cost</TableHead>
@@ -106,13 +124,29 @@ watch(form, (newVal) => {
                         <template v-if="projects?.data.length">
                             <TableRow v-for="item in projects.data" :key="item.id">
                                 <TableCell class="font-medium">
+                                    <!-- {{ item.image }} -->
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger as-child>
+                                                <img @click="onViewUpload(item.id)"
+                                                    :src="item.image || '/images/logo.png'" alt="image"
+                                                    class="h-14 w-14 rounded-full object-cover cursor-pointer hover:border border-green-700" />
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Click me to change image.</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+
+                                </TableCell>
+                                <TableCell class="font-medium">
                                     {{ item.project_name }}
                                 </TableCell>
                                 <TableCell class="font-medium">
                                     {{ item.location }}
                                 </TableCell>
                                 <TableCell class="font-medium">
-                                    {{ item.cost }}
+                                    {{ formatPeso(item.cost) }}
                                 </TableCell>
                                 <TableCell class="font-medium">
                                     {{ moment(item.start_date).format('LL') }}
@@ -133,8 +167,10 @@ watch(form, (newVal) => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -150,14 +186,9 @@ watch(form, (newVal) => {
             </div>
             <div class="mt-4 flex items-center justify-between gap-1">
                 <div class="flex gap-1">
-                    <Button
-                        v-for="link in projects?.links"
-                        :key="link.label"
-                        :variant="link.active ? 'default' : 'outline'"
-                        :disabled="!link.url"
-                        v-html="link.label"
-                        @click="link.url && router.visit(link.url)"
-                    />
+                    <Button v-for="link in projects?.links" :key="link.label"
+                        :variant="link.active ? 'default' : 'outline'" :disabled="!link.url" v-html="link.label"
+                        @click="link.url && router.visit(link.url)" />
                 </div>
                 <div>
                     Showing {{ projects?.from ? projects?.from : 0 }} to {{ projects?.to ? projects?.to : 0 }} of
@@ -166,5 +197,6 @@ watch(form, (newVal) => {
             </div>
         </div>
         <ConfirmAlertDialog @continue="confirmDelete" v-model:visible="visible" />
+        <UploadForm v-model:open="visible2" :id="projectId" @close="visible2 = false" />
     </AppLayout>
 </template>

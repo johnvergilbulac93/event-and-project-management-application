@@ -10,9 +10,29 @@ use Inertia\Inertia;
 
 class FeedbackController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        return Inertia::render('barangay-record/feedback/Feedback');
+        $search = $request->input('search');
+        $page = $request->input("page");
+        $limit = $request->input("limit");
+
+
+        $feedbacks = Feedback::query()
+            ->when($search, function ($query, $search) {
+                $query->where('subject', 'like', "%{$search}%")
+                    ->orWhere('comment', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit)
+            ->withQueryString(); // keep query string during pagination
+
+        return Inertia::render('barangay-record/feedback/Feedback', [
+            'feedbacks' => $feedbacks,
+            'filters' => [
+                'search' => $search,
+            ]
+        ]);
     }
     public function store(FeedbackRequest $request)
     {
@@ -20,5 +40,10 @@ class FeedbackController extends Controller
         Feedback::create($feedback);
 
         // return redirect()->route('welcome');
+    }
+    public function destroy($id)
+    {
+        $feedback = Feedback::findOrFail($id);
+        $feedback->delete();
     }
 }

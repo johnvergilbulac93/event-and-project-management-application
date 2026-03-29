@@ -142,7 +142,7 @@ watch(form, (newVal) => {
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
-                                            <!-- <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem> -->
+                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

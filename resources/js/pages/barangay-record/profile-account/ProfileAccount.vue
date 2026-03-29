@@ -21,7 +21,7 @@ import { toast } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Profile Account',
+        title: 'Household Head Profile',
         href: '/barangay-record/profile-account',
     },
 ];
@@ -100,6 +100,7 @@ watch(form, (newVal) => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+
         <Head title="Profile Account" />
         <Layout>
             <div class="flex flex-col space-y-6">
@@ -109,19 +110,13 @@ watch(form, (newVal) => {
             <div class="mt-4">
                 <div class="flex justify-between gap-2">
                     <div class="mb-4 flex gap-2 sm:w-full md:w-1/2">
-                        <Input
-                            v-model="form.search"
-                            id="search"
-                            type="text"
-                            required
-                            autofocus
-                            :tabindex="1"
-                            autocomplete="search"
-                            placeholder="search"
-                        />
+                        <Input v-model="form.search" id="search" type="text" required autofocus :tabindex="1"
+                            autocomplete="search" placeholder="search" />
                         <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                     </div>
-                    <Button @click="onCreate"> <Plus /> Add </Button>
+                    <Button @click="onCreate">
+                        <Plus /> Add
+                    </Button>
                 </div>
                 <div class="rounded border">
                     <Table>
@@ -142,9 +137,10 @@ watch(form, (newVal) => {
                                     <TableCell class="font-medium">
                                         {{ item.gender }}
                                     </TableCell>
-                                    <TableCell
-                                        ><Badge :class="item.isActive == 0 ? 'bg-red-500' : ''" v-text="item.isActive == 1 ? 'Active' : 'Inactive'"
-                                    /></TableCell>
+                                    <TableCell>
+                                        <Badge :class="item.isActive == 0 ? 'bg-red-500' : ''"
+                                            v-text="item.isActive == 1 ? 'Active' : 'Inactive'" />
+                                    </TableCell>
                                     <TableCell class="w-20 text-center">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger as-child>
@@ -155,12 +151,15 @@ watch(form, (newVal) => {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
-                                                <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
+                                                <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)">
+                                                    View </DropdownMenuItem>
+                                                <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)">
+                                                    Delete </DropdownMenuItem>
                                                 <DropdownMenuItem class="cursor-pointer" @click="onHouseHold(item.id)">
                                                     Household Member
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem class="cursor-pointer" @click="showQrCode(item)"> Show Qr Code </DropdownMenuItem>
+                                                <DropdownMenuItem class="cursor-pointer" @click="showQrCode(item)"> Show
+                                                    Qr Code </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
@@ -176,14 +175,9 @@ watch(form, (newVal) => {
                 </div>
                 <div class="mt-4 flex items-center justify-between gap-1">
                     <div class="flex gap-1">
-                        <Button
-                            v-for="link in users?.links"
-                            :key="link.label"
-                            :variant="link.active ? 'default' : 'outline'"
-                            :disabled="!link.url"
-                            v-html="link.label"
-                            @click="link.url && router.visit(link.url)"
-                        />
+                        <Button v-for="link in users?.links" :key="link.label"
+                            :variant="link.active ? 'default' : 'outline'" :disabled="!link.url" v-html="link.label"
+                            @click="link.url && router.visit(link.url)" />
                     </div>
                     <div>
                         Showing {{ users?.from ? users?.from : 0 }} to {{ users?.to ? users?.to : 0 }} of
@@ -192,15 +186,13 @@ watch(form, (newVal) => {
                 </div>
             </div>
             <ConfirmAlertDialog @continue="confirmDelete" v-model:visible="visible" />
-            <Dialog @ok="downloadQRCode" :button-text="'Download'" v-model:visible2="visible2" :title="'Download your Qr Code'">
+            <Dialog @ok="downloadQRCode" :button-text="'Download'" v-model:visible2="visible2"
+                :title="'Download your Qr Code'">
                 <div class="flex items-center justify-center" ref="templateReference">
-                    <vue-qrcode
-                        :value="qrValue"
-                        :options="{
-                            width: 460,
-                            color: { dark: '#20A418', light: '#ffffff' },
-                        }"
-                    />
+                    <vue-qrcode :value="qrValue" :options="{
+                        width: 460,
+                        color: { dark: '#031002', light: '#ffffff' },
+                    }" />
                 </div>
             </Dialog>
         </Layout>
