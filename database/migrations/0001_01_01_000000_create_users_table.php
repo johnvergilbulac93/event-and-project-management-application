@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->softDeletes();
             $table->string('password');
-
+            $table->foreignId('role_id')->nullable()->index();
             $table->boolean('isActive')->default(true);
             $table->rememberToken();
             $table->timestamps();

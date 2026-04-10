@@ -89,25 +89,20 @@ watch(form, (newVal) => {
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+
         <Head title="User Account" />
         <Toaster richColors closeButton position="top-right" />
         <div class="px-4 py-6">
             <Heading title="User Account" description="Manage user account" />
             <div class="flex justify-between gap-2">
                 <div class="mb-4 flex gap-2 sm:w-full md:w-1/2">
-                    <Input
-                        v-model="form.search"
-                        id="search"
-                        type="text"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="search"
-                        placeholder="search"
-                    />
+                    <Input v-model="form.search" id="search" type="text" required autofocus :tabindex="1"
+                        autocomplete="search" placeholder="search" />
                     <!-- <Button @click="handleSearch"> <Search />Search </Button> -->
                 </div>
-                <Button @click="onCreate"> <Plus /> Add </Button>
+                <Button @click="onCreate">
+                    <Plus /> Add
+                </Button>
             </div>
             <div class="rounded border">
                 <Table>
@@ -128,9 +123,10 @@ watch(form, (newVal) => {
                                 <TableCell class="font-medium">
                                     {{ moment(item.created_at).format('LLL') }}
                                 </TableCell>
-                                <TableCell
-                                    ><Badge :class="item.isActive == 0 ? 'bg-red-500' : ''" v-text="item.isActive == 1 ? 'Active' : 'Inactive'"
-                                /></TableCell>
+                                <TableCell>
+                                    <Badge :class="item.isActive == 0 ? 'bg-red-500' : ''"
+                                        v-text="item.isActive == 1 ? 'Active' : 'Inactive'" />
+                                </TableCell>
                                 <TableCell class="w-20 text-center">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger as-child>
@@ -141,8 +137,10 @@ watch(form, (newVal) => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -158,30 +156,25 @@ watch(form, (newVal) => {
             </div>
             <div class="mt-4 flex items-center justify-between gap-1">
                 <div class="flex gap-1">
-                    <Button
-                        v-for="link in users?.links"
-                        :key="link.label"
-                        :variant="link.active ? 'default' : 'outline'"
-                        :disabled="!link.url"
-                        v-html="link.label"
-                        @click="link.url && router.visit(link.url)"
-                    />
+                    <Button v-for="link in users?.links" :key="link.label"
+                        :variant="link.active ? 'default' : 'outline'" :disabled="!link.url" v-html="link.label"
+                        @click="link.url && router.visit(link.url)" />
                 </div>
                 <div>
-                    Showing {{ users?.from ? users?.from : 0 }} to {{ users?.to ? users?.to : 0 }} of {{ users?.total ? users?.total : 0 }} entries
+                    Showing {{ users?.from ? users?.from : 0 }} to {{ users?.to ? users?.to : 0 }} of {{ users?.total ?
+                    users?.total
+                    : 0 }} entries
                 </div>
             </div>
         </div>
         <ConfirmAlertDialog @continue="confirmDelete" v-model:visible="visible" />
-        <Dialog @ok="downloadQRCode" :button-text="'Download'" v-model:visible2="visible2" :title="'Download your Qr Code'">
+        <Dialog @ok="downloadQRCode" :button-text="'Download'" v-model:visible2="visible2"
+            :title="'Download your Qr Code'">
             <div class="flex items-center justify-center" ref="templateReference">
-                <vue-qrcode
-                    :value="qrValue"
-                    :options="{
-                        width: 460,
-                        color: { dark: '#20A418', light: '#ffffff' },
-                    }"
-                />
+                <vue-qrcode :value="qrValue" :options="{
+                    width: 460,
+                    color: { dark: '#20A418', light: '#ffffff' },
+                }" />
             </div>
         </Dialog>
     </AppLayout>
