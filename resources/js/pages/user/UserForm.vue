@@ -8,7 +8,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'User Account',
@@ -33,6 +34,7 @@ const form = useForm({
     email: '',
     suffix: '',
     gender: '',
+    role: 'secretary'
 });
 function back() {
     router.visit(route('user.index'), { method: 'get' });
@@ -43,6 +45,18 @@ function onSubmit() {
 function onUpdate() {
     form.put(route('user.update', form.id))
 }
+
+const onInput = (e: Event) => {
+    let value = (e.target as HTMLInputElement).value;
+
+    // keep digits only
+    value = value.replace(/\D/g, '');
+
+    // limit to 11 digits
+    value = value.substring(0, 11);
+
+    form.mobile_no = value;
+};
 
 onMounted(() => {
     title.value = props.users ? 'Update' : 'Create';
@@ -61,12 +75,15 @@ onMounted(() => {
         form.mobile_no = props.users.mobile_no;
         form.email = props.users.email;
         form.suffix = props.users.suffix;
+        form.role = props.users.role;
+
     }
 });
 </script>
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
+
         <Head title="User Account" />
         <div class="px-4 py-6">
             <Heading :title="`${title} Account`" :description="`${title} a user account`" />
@@ -75,57 +92,31 @@ onMounted(() => {
                     <div class="flex w-full gap-2">
                         <div class="w-full space-y-2">
                             <Label for="last_name" :class="{ 'text-red-500': form.errors.last_name }">Last Name</Label>
-                            <Input
-                                id="last_name"
-                                type="text"
-                                autofocus
-                                :tabindex="1"
-                                autocomplete="last_name"
-                                v-model="form.last_name"
-                                placeholder="last name"
-                                :class="{ 'border border-red-500': form.errors.last_name }"
-                            />
+                            <Input id="last_name" type="text" autofocus :tabindex="1" autocomplete="last_name"
+                                v-model="form.last_name" placeholder="last name"
+                                :class="{ 'border border-red-500': form.errors.last_name }" />
                             <InputError :message="form.errors.last_name" />
                         </div>
                         <div class="w-full space-y-2">
-                            <Label for="middle_name" :class="{ 'text-red-500': form.errors.middle_name }">Middle Name</Label>
-                            <Input
-                                id="middle_name"
-                                type="text"
-                                autofocus
-                                :tabindex="2"
-                                autocomplete="middle_name"
-                                v-model="form.middle_name"
-                                placeholder="middle name"
-                                :class="{ 'border border-red-500': form.errors.middle_name }"
-                            />
+                            <Label for="middle_name" :class="{ 'text-red-500': form.errors.middle_name }">Middle
+                                Name</Label>
+                            <Input id="middle_name" type="text" autofocus :tabindex="2" autocomplete="middle_name"
+                                v-model="form.middle_name" placeholder="middle name"
+                                :class="{ 'border border-red-500': form.errors.middle_name }" />
                             <InputError :message="form.errors.middle_name" />
                         </div>
                         <div class="w-full space-y-2">
-                            <Label for="first_name" :class="{ 'text-red-500': form.errors.first_name }">First Name</Label>
-                            <Input
-                                id="first_name"
-                                type="text"
-                                autofocus
-                                :tabindex="3"
-                                autocomplete="first_name"
-                                v-model="form.first_name"
-                                placeholder="first name"
-                                :class="{ 'border border-red-500': form.errors.first_name }"
-                            />
+                            <Label for="first_name" :class="{ 'text-red-500': form.errors.first_name }">First
+                                Name</Label>
+                            <Input id="first_name" type="text" autofocus :tabindex="3" autocomplete="first_name"
+                                v-model="form.first_name" placeholder="first name"
+                                :class="{ 'border border-red-500': form.errors.first_name }" />
                             <InputError :message="form.errors.first_name" />
                         </div>
                         <div class="w-full space-y-2">
                             <Label for="suffix">Suffix</Label>
-                            <Input
-                                id="suffix"
-                                type="text"
-                                autofocus
-                                :tabindex="4"
-                                autocomplete="suffix"
-                                v-model="form.suffix"
-                                placeholder="Jr,Sr,I,II,III,IV"
-                            />
+                            <Input id="suffix" type="text" autofocus :tabindex="4" autocomplete="suffix"
+                                v-model="form.suffix" placeholder="Jr,Sr,I,II,III,IV" />
                         </div>
                     </div>
                 </div>
@@ -133,22 +124,18 @@ onMounted(() => {
                 <div class="grid gap-2">
                     <div class="flex w-full gap-2">
                         <div class="space-y-2">
-                            <Label for="date_of_birth" :class="{ 'text-red-500': form.errors.date_of_birth }">Date of Birth</Label>
-                            <Input
-                                id="date_of_birth"
-                                :class="{ 'border border-red-500': form.errors.date_of_birth }"
-                                type="date"
-                                autofocus
-                                :tabindex="4"
-                                autocomplete="date_of_birth"
-                                v-model="form.date_of_birth"
-                            />
+                            <Label for="date_of_birth" :class="{ 'text-red-500': form.errors.date_of_birth }">Date of
+                                Birth</Label>
+                            <Input id="date_of_birth" :class="{ 'border border-red-500': form.errors.date_of_birth }"
+                                type="date" autofocus :tabindex="4" autocomplete="date_of_birth"
+                                v-model="form.date_of_birth" />
                             <InputError :message="form.errors.date_of_birth" />
                         </div>
                         <div class="space-y-2">
                             <Label for="gender" :class="{ 'text-red-500': form.errors.gender }">Gender</Label>
                             <Select :tabindex="5" v-model="form.gender">
-                                <SelectTrigger class="w-[180px]" :class="{ 'border border-red-500': form.errors.gender }" type="date">
+                                <SelectTrigger class="w-[180px]"
+                                    :class="{ 'border border-red-500': form.errors.gender }" type="date">
                                     <SelectValue placeholder="Select a gender" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -162,17 +149,11 @@ onMounted(() => {
                             <InputError :message="form.errors.gender" />
                         </div>
                         <div class="w-full space-y-2">
-                            <Label for="birth_place" :class="{ 'text-red-500': form.errors.birth_place }">Place of Birth</Label>
-                            <Input
-                                id="birth_place"
-                                type="text"
-                                autofocus
-                                :tabindex="6"
-                                autocomplete="birth_place"
-                                v-model="form.birth_place"
-                                placeholder="birth place"
-                                :class="{ 'border border-red-500': form.errors.birth_place }"
-                            />
+                            <Label for="birth_place" :class="{ 'text-red-500': form.errors.birth_place }">Place of
+                                Birth</Label>
+                            <Input id="birth_place" type="text" autofocus :tabindex="6" autocomplete="birth_place"
+                                v-model="form.birth_place" placeholder="birth place"
+                                :class="{ 'border border-red-500': form.errors.birth_place }" />
                             <InputError :message="form.errors.birth_place" />
                         </div>
                     </div>
@@ -181,35 +162,38 @@ onMounted(() => {
                     <div class="flex w-full gap-2">
                         <div class="w-full space-y-2">
                             <Label for="email" :class="{ 'text-red-500': form.errors.email }">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                :class="{ 'border border-red-500': form.errors.email }"
-                                autofocus
-                                :tabindex="7"
-                                autocomplete="email"
-                                v-model="form.email"
-                                placeholder="email"
-                            />
+                            <Input id="email" type="email" :class="{ 'border border-red-500': form.errors.email }"
+                                autofocus :tabindex="7" autocomplete="email" v-model="form.email" placeholder="email" />
                             <InputError :message="form.errors.email" />
                         </div>
                         <div class="w-full space-y-2">
                             <Label for="mobile_no" :class="{ 'text-red-500': form.errors.mobile_no }">Mobile No.</Label>
-                            <Input
-                                id="mobile_no"
-                                type="text"
-                                autofocus
-                                :tabindex="8"
-                                autocomplete="mobile_no"
-                                v-model="form.mobile_no"
-                                placeholder="mobile no."
-                                :class="{ 'border border-red-500': form.errors.mobile_no }"
-                            />
+                            <Input id="mobile_no" placeholder="0912 3456 789" @input="onInput" type="text" autofocus
+                                :tabindex="8" autocomplete="mobile_no" v-model="form.mobile_no"
+                                :class="{ 'border border-red-500': form.errors.mobile_no }" />
                             <InputError :message="form.errors.mobile_no" />
                         </div>
                     </div>
                 </div>
- 
+                <div class="grid gap-2">
+                    <div class="space-y-2">
+                        <Label for="gender">Role</Label>
+                        <Select :tabindex="5" v-model="form.role">
+                            <SelectTrigger class="w-[180px]" type="date">
+                                <SelectValue placeholder="Select a role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Role Type</SelectLabel>
+                                    <SelectItem value="admin"> Admin </SelectItem>
+                                    <SelectItem value="secretary"> Secretary </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <InputError :message="form.errors.gender" />
+                    </div>
+                </div>
+
                 <div class="mt-4 flex items-center justify-between">
                     <Button tabindex="13" size="sm" type="button" @click="back"> Back </Button>
                     <Button tabindex="12" size="sm" type="submit"> Submit </Button>

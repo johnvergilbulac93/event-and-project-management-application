@@ -10,6 +10,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
+defineProps({ description: { type: String, default: 'This action cannot be undone. This will permanently deleted.' } });
+
 const visible = defineModel<boolean>('visible')
 const emit = defineEmits(['continue'])
 </script>
@@ -20,7 +22,7 @@ const emit = defineEmits(['continue'])
       <AlertDialogHeader>
         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently deleted.
+          {{ description }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

@@ -11,6 +11,7 @@ import debounce from 'lodash.debounce';
 import { onMounted, reactive, ref, watch } from 'vue';
 import { toast } from 'vue-sonner';
 import Layout from '../barangay-record/Layout.vue';
+import HeadingSmall from '@/components/HeadingSmall.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Manage Attendance',
@@ -74,10 +75,13 @@ watch(form, (newVal) => {
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
         <Toaster richColors position="top-right" />
+
         <Head title="Manage Attendance" />
         <Layout>
-            <Heading title="Manage Attendance" description="Manage your attendance" />
-            <div class="rounded border">
+            <div class="flex flex-col space-y-6">
+                <HeadingSmall title="Manage Attendance" description="Manage your attendance" />
+            </div>
+            <div class="rounded border mt-4">
                 <Table>
                     <TableHeader>
                         <TableRow>

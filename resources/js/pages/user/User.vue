@@ -20,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const { flash } = usePage().props as any;
+const { flash, auth } = usePage().props as any;
 const props = defineProps({ users: Object, filter: Object });
 const form = reactive({
     search: props.filter?.search || '',
@@ -139,7 +139,8 @@ watch(form, (newVal) => {
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuItem class="cursor-pointer" @click="onUpdate(item.id)"> View
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem class="cursor-pointer" @click="onDelete(item.id)"> Delete
+                                            <DropdownMenuItem v-if="auth?.user?.role === 'admin'" class="cursor-pointer"
+                                                @click="onDelete(item.id)"> Delete
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -162,8 +163,8 @@ watch(form, (newVal) => {
                 </div>
                 <div>
                     Showing {{ users?.from ? users?.from : 0 }} to {{ users?.to ? users?.to : 0 }} of {{ users?.total ?
-                    users?.total
-                    : 0 }} entries
+                        users?.total
+                        : 0 }} entries
                 </div>
             </div>
         </div>

@@ -26,13 +26,15 @@ class EventFormRequest extends FormRequest
             'description' => 'required|string',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
-            'date' => 'required|string',
-            'status' => 'nullable', 
+            'date' => 'required|date|after_or_equal:today',
+            'status' => 'nullable',
         ];
     }
-    public function messages(){
+    public function messages()
+    {
         return [
-            'end_time.after' => "Invalid date must after start time"
+            'end_time.after' => "Invalid time.",
+            'date.after_or_equal' => "Invalid date."
         ];
     }
 }

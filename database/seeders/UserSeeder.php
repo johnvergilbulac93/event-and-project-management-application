@@ -18,12 +18,19 @@ class UserSeeder extends Seeder
 
         User::create([
             'email' => 'admin@example.com',
-            'first_name' => 'John',
+            'first_name' => 'Admin',
             'middle_name' => 'O',
             'last_name' => 'Doe',
             'password' => Hash::make('12345678'),
-            'role_id' => 1
-
+            'role' => 'admin'
+        ]);
+        User::create([
+            'email' => 'secretary@example.com',
+            'first_name' => 'Secretary',
+            'middle_name' => 'O',
+            'last_name' => 'Doe',
+            'password' => Hash::make('12345678'),
+            'role' => 'secretary'
         ]);
 
         // foreach (range(1, 20) as $index) {

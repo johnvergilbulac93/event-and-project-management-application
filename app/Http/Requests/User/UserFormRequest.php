@@ -29,8 +29,9 @@ class UserFormRequest extends FormRequest
             'date_of_birth' => 'required',
             'gender' => 'required|string',
             'birth_place' => 'required',
-            'mobile_no' => 'nullable',
+            'mobile_no' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $this->id,
+            'role' => 'string|nullable'
         ];
     }
 }

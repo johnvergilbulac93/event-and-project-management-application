@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Archives\ArchivesController;
 use App\Http\Controllers\Attendance\AttendanceController;
 use App\Http\Controllers\Feedback\FeedbackController;
 use App\Http\Controllers\Report\ReportController;
@@ -42,5 +43,10 @@ Route::middleware('auth')->prefix('barangay-record')->group(function () {
         Route::get('/project/export', 'exportProject')->name('barangay-record.report.project.export');
         Route::get('/attendance/{event_id}', 'getAttendance')->name('barangay-record.report.attendance');
         Route::get('/attendance/{event_id}/export', 'exportAttendance')->name('barangay-record.report.attendance.export');
+    });
+    Route::prefix('archives')->controller(ArchivesController::class)->group(function () {
+        Route::get('/', 'userArchives')->name('user.archives');
+        Route::delete('/{id}', 'destroy')->name('user.archives.destroy');
+        Route::patch('/{id}', 'restore')->name('user.archives.restore');
     });
 });
