@@ -34,7 +34,7 @@ const form = useForm({
     email: '',
     suffix: '',
     gender: '',
-    role: 'secretary'
+    role: 'guest'
 });
 function back() {
     router.visit(route('user.index'), { method: 'get' });
@@ -186,7 +186,7 @@ onMounted(() => {
                                 <SelectGroup>
                                     <SelectLabel>Role Type</SelectLabel>
                                     <SelectItem value="admin"> Admin </SelectItem>
-                                    <SelectItem value="secretary"> Secretary </SelectItem>
+                                    <SelectItem value="guest"> Guest </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

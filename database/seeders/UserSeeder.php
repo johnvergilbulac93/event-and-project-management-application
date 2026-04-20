@@ -25,12 +25,12 @@ class UserSeeder extends Seeder
             'role' => 'admin'
         ]);
         User::create([
-            'email' => 'secretary@example.com',
-            'first_name' => 'Secretary',
+            'email' => 'guest@example.com',
+            'first_name' => 'Guest',
             'middle_name' => 'O',
-            'last_name' => 'Doe',
+            'last_name' => 'User',
             'password' => Hash::make('12345678'),
-            'role' => 'secretary'
+            'role' => 'guest'
         ]);
 
         // foreach (range(1, 20) as $index) {

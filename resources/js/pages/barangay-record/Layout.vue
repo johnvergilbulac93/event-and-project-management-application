@@ -9,24 +9,24 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Household Head Profile',
         href: '/barangay-record/profile-account',
-        roles: ['admin', 'secretary'],
+        roles: ['admin', 'guest'],
     },
     {
         title: 'Attendance',
         href: '/barangay-record/attendance',
-        roles: ['admin', 'secretary'],
+        roles: ['admin', 'guest'],
 
     },
     {
         title: 'Feedback',
         href: '/barangay-record/feedback',
-        roles: ['admin', 'secretary'],
+        roles: ['admin', 'guest'],
 
     },
     {
         title: 'Report',
         href: '/barangay-record/report',
-        roles: ['admin', 'secretary'],
+        roles: ['admin', 'guest'],
 
     },
     {
@@ -61,7 +61,7 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
                     <Button v-for="item in filteredNavItems" :key="item.href" variant="ghost"
                         :class="['w-full justify-start', { 'bg-muted': currentPath === item.href }]" as-child>
                         <Link :href="item.href">
-                            {{ item.title }} 
+                            {{ item.title }}
                         </Link>
                     </Button>
                 </nav>

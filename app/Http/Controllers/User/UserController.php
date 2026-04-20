@@ -44,7 +44,7 @@ class UserController extends Controller
     {
         $user = $request->validated();
         $user['password'] = '12345678';
-        $user['role'] =  $request->role ? $request->role : 'secretary';
+        $user['role'] =  $request->role ? $request->role : 'guest';
         User::create($user);
         return redirect()->route('user.index')
             ->with('message', 'Successfully saved.');
@@ -60,7 +60,7 @@ class UserController extends Controller
     public function update(UserFormRequest $request, $id)
     {
         $user = $request->validated();
-        $user['role'] =  $request->role ? $request->role : 'secretary';
+        $user['role'] =  $request->role ? $request->role : 'guest';
         User::whereId($id)->update($user);
         return redirect()->route('user.index')
             ->with('message', 'Successfully updated.');
