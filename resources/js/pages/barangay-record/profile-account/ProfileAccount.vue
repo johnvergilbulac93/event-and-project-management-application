@@ -58,7 +58,7 @@ const onDelete = (id: number) => {
     userId.value = id;
 };
 const confirmDelete = () => {
-    router.delete(route('user.destroy', userId.value), { onSuccess: () => toast.success('Successfully deleted.') });
+    router.delete(route('barangay-record.profile-account.destroy', userId.value), { onSuccess: () => toast.success('Successfully deleted.') });
 };
 const showQrCode = (record: any) => {
     qrValue.value = record.email;
